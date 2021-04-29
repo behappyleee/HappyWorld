@@ -1,0 +1,55 @@
+template engine ==> 과거 php html을 동적으로 바꾸어 줌
+
+정적컨텐츠와의 차이는 파일을 그대로 고객에게 그대로 전달 해줌
+
+template engine은 약간 동적으로 바꾸어서 보여줌
+
+json이라는 데이터 구조 포맷으로 클라이언트에게 전달
+
+서버끼리는 html 데이터가 굳이 필요는 없음
+
+API 방식 
+
+-- mvc 와 template engine 작동 방식
+MVC ( Model View Controller)
+
+모델 1 - jsp방식으로 jsp에서 모든 것을 처리
+
+controller 와 modell 은 비즈니스 로직과 관련 있음 
+요즘은 controller 와 view를 쪼개야 함
+
+busincess 로직과 view는 철저히 분리시켜야 함 
+
+최근에는 거의 json 방식만 사용함 (spring도 기본은 객체를 반환하고 json 으로 반환 ) --> 기본으로 json으로 반환하는게 default임
+
+@ResponseBody 는 내장 톰캣 서버에서 hello-api가 왔다고 인지
+responsebody가 붙었다고 인지 template 은 viewResolver에게 던짐 responsebody가 있을시에는 그냥 데이터를 던진다는 것을 인지 
+객체를 반환시에는 한번 생각해봐야함 responsebody라고 올 시 Hello 객체를 넘길 때 HttpMessageConverter가 작동 (viewResolver 가 아닌 ) HttpMessageConverter 가 객체이면 Json Converter 작동
+
+viewResolver가 springboot에서 이미 등록을 해놓음 (setting을 해놓음)
+기본 문자처리 -> StringHttpMessageConverter가 작동
+기본 객체처리 -> MappingJackson2HttpMessageConverter가 작동을 함
+
+HTTP Accept 헤더와 허버의 컨트롤러 반환 타입 정보 둘을 조합하여 
+
+HttpMessageConverter가 작동을 함
+
+1) 정적 컨텐츠 방식
+2) MVC 와 templteEngine 방식
+3) API 방식
+
+-- 비즈니스 요구 사항
+데이터: 회원 ID, 이름
+기능: 회원 등록, 조회
+아직 데이터 저장소가 선정되지 않음(가상의 시나리오)
+
+!! 일반적인 웹 애플리케이션 계층 구조
+컨트롤러 -> 서비스 -> 리포지토리 -> DB
+
+도메인 : 비즈니스 도메인 객체 예) 회원 주문, 쿠폰 등등 주로 데이터 베이스에 주로 관리 됨 
+
+코드 테스트 방법 --> main 메서드를 통해 실행하거나 웹어플리케이션의 컨트롤러를 통해 해당 기능을 실행 
+Junit 이라는 프레임 워크로 테스트를 실행을 하기도 함 
+
+각 메서드를 테스트 하는 방식은 controller나 값을 직접 get 이나 post로 넘겨서 테스트 하는 방식 있지만 가장 좋은 방법은 Test에서 메서드를 작성하여 테스트 하는 방식이 가장 좋음 
+
